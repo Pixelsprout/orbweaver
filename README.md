@@ -3,7 +3,9 @@
 ![The ball at the start of level 1, on web-patterned blocks under a dusk sky](docs/poster.png)
 
 A small ball-rolling puzzle game on the [rocco](https://github.com/Pixelsprout/rocco-engine)
-engine, built for the web.
+engine, built for the web. It is inspired by
+[Kula World](https://en.wikipedia.org/wiki/Kula_World) on the PlayStation. The
+levels, the look, the models and the sounds are its own.
 
 A ball rolls over floating blocks at dusk. When the ball rolls over an edge,
 gravity turns with it, so every face of a block is floor. Collect every key,
