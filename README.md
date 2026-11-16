@@ -1,5 +1,7 @@
 # Orbweaver
 
+![The ball at the start of level 1, on web-patterned blocks under a dusk sky](docs/poster.png)
+
 A small ball-rolling puzzle game on the [rocco](https://github.com/Pixelsprout/rocco-engine)
 engine, built for the web.
 
@@ -49,11 +51,14 @@ sh scripts/toolchain.sh install-emsdk
 sh scripts/toolchain.sh run roc scripts/build.roc web-host --release
 ```
 
-`scripts/build.roc web` builds only games under `examples/`, so link this
-directory in, then build:
+`scripts/build.roc web` builds only games under `examples/`. Copy the game
+there, and point the header at the checkout, so the web build links the
+release host you built:
 
 ```sh
-ln -s ~/playground/kula-web examples/orbweaver
+mkdir examples/orbweaver
+git -C ~/playground/kula-web archive HEAD | tar x -C examples/orbweaver
+sed -i '' -E '1s#(pf: platform )"[^"]*"#\1"../../platform/main.roc"#; 1s#(linalg|mesh|ui): "[^"]*"#\1: "../../packages/\1/main.roc"#g' examples/orbweaver/main.roc
 sh scripts/toolchain.sh run roc scripts/build.roc web orbweaver
 ```
 
