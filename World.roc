@@ -1,0 +1,12 @@
+# Orbweaver's types. A cell is an integer grid position. An axis is a cell with one
+# component of magnitude 1. The ball stands on the block at cell - up.
+World := [].{
+	Cell : { x : I32, y : I32, z : I32 }
+	Pose : { cell : Cell, up : Cell, forward : Cell }
+	Item : [Key, Coin, Fruit, Exit]
+	# An item sits in cell, on the face of the block at cell - up. time is the
+	# start time in seconds.
+	Level : { blocks : Set(Cell), items : List({ cell : Cell, up : Cell, item : Item }), start : Pose, time : U64 }
+	# The ids Orbweaver draws with. sky is a sky id, not a mesh id.
+	Meshes : { sphere : U32, face : U32, ball : U32, coin : U32, apple : U32, watermelon : U32, pumpkin : U32, key : U32, sky : U32 }
+}
