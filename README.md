@@ -34,7 +34,7 @@ A web build has no gamepad.
 ## Run
 
 Orbweaver needs Roc `nightly-2026-11-04-2622062`. Roc downloads the rocco
-v0.14.0 bundles named in the `main.roc` header. From this directory:
+v0.14.1 bundles named in the `main.roc` header. From this directory:
 
 ```sh
 roc main.roc
@@ -43,30 +43,18 @@ roc test main.roc
 
 ## Web build
 
-The web build needs a rocco-engine checkout at tag `v0.14.0` and emscripten.
-In the rocco-engine checkout:
+The web build needs Roc and Python 3. From this directory:
 
 ```sh
-sh scripts/toolchain.sh install-emsdk
-sh scripts/toolchain.sh run roc scripts/build.roc web-host --release
+curl -LO https://github.com/Pixelsprout/rocco-engine/releases/download/v0.14.1/rocco_web.py
+python3 rocco_web.py
 ```
 
-`scripts/build.roc web` builds only games under `examples/`. Copy the game
-there, and point the header at the checkout, so the web build links the
-release host you built:
-
-```sh
-mkdir examples/orbweaver
-git -C ~/playground/kula-web archive HEAD | tar x -C examples/orbweaver
-sed -i '' -E '1s#(pf: platform )"[^"]*"#\1"../../platform/main.roc"#; 1s#(linalg|mesh|ui): "[^"]*"#\1: "../../packages/\1/main.roc"#g' examples/orbweaver/main.roc
-sh scripts/toolchain.sh run roc scripts/build.roc web orbweaver
-```
-
-The build writes `build/web/orbweaver/`. Serve it from `localhost`, because
+The build writes `build/web/` and a zip. Serve the folder from `localhost`, because
 WebGPU needs a secure context:
 
 ```sh
-python3 -m http.server 8000 --bind 127.0.0.1 --directory build/web/orbweaver
+python3 -m http.server 8000 --bind 127.0.0.1 --directory build/web
 ```
 
 `web/index.html` is the page. It shows only the canvas on a dark background

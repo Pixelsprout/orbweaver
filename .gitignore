@@ -7,3 +7,6 @@
 *.lib
 .DS_Store
 __pycache__/
+# rocco_web.py output, and the script itself.
+build/
+rocco_web.py
