@@ -48,7 +48,7 @@ end_panels = |model, ending| {
 		{ ..top_centre, pad: Ui.pad_all(16.0), background: { r: 0.0, g: 0.0, b: 0.0, a: 0.5 * shown } },
 		[Text({ ..Ui.label("WELL DONE"), size: 56.0, color: { r: 1.0, g: 0.85, b: 0.2, a: shown } })],
 	)
-	scores = Panel({ ..panel, direction: Col, gap: 4.0 }, [Text(Ui.label("Level ${counted.to_str()}")), Text(Ui.label("Score ${(before + counted).to_str()}"))])
+	scores = Panel({ ..panel, direction: Col, gap: 4.0 }, [Text(Ui.label("Level score ${counted.to_str()}")), Text(Ui.label("Score ${(before + counted).to_str()}"))])
 	prompt = if Ending.finished(ending) {
 		[Text(Ui.label("Press Space"))]
 	} else {
@@ -104,7 +104,7 @@ keys = |model| {
 scores : Rules.Model -> Element
 scores = |model| Panel(
 	{ ..panel, direction: Col, gap: 4.0 },
-	[Text(Ui.label("Level ${model.score.level.to_str()}")), Text(Ui.label("Score ${model.score.total.to_str()}"))],
+	[Text(Ui.label("Level score ${model.score.level.to_str()}")), Text(Ui.label("Score ${model.score.total.to_str()}"))],
 )
 
 # The five fruit icons sit at the bottom right, each lit when
@@ -181,11 +181,11 @@ root_with = |model, prefix| match Hud.ui(model).keep_if(|root| texts(root).any(|
 expect
 	match root_with(Rules.start(View.primitive_meshes, 1), "Keys") {
 		Ok(Panel(row, [Panel(_, [keys_panel]), scores_panel])) =>
-			row.floating == Float({ to: Window, attach: LeftBottom, on: LeftBottom, offset: { x: 0.0, y: 0.0 } }) and texts(keys_panel) == ["Keys 0 / 1"] and texts(scores_panel) == ["Level 0", "Score 0"]
+			row.floating == Float({ to: Window, attach: LeftBottom, on: LeftBottom, offset: { x: 0.0, y: 0.0 } }) and texts(keys_panel) == ["Keys 0 / 1"] and texts(scores_panel) == ["Level score 0", "Score 0"]
 		_ => Bool.False
 	}
 
-expect root_with({ ..one_key, score: { ..one_key.score, total: 2500 } }, "Keys").map_ok(texts) == Ok(["Keys 1 / 1", "Level 1000", "Score 2500"])
+expect root_with({ ..one_key, score: { ..one_key.score, total: 2500 } }, "Keys").map_ok(texts) == Ok(["Keys 1 / 1", "Level score 1000", "Score 2500"])
 
 # Once the icons load, the keys panel shows one icon a key in place of the text.
 expect
@@ -281,7 +281,7 @@ ended = |seconds| {
 }
 
 # The level end panel replaces the HUD. Its count starts at the old total.
-expect end_texts(ended(0.0)) == ["WELL DONE", "Level 0", "Score 2000"]
+expect end_texts(ended(0.0)) == ["WELL DONE", "Level score 0", "Score 2000"]
 
 # After 0.5 s the count has reached 2500, and the banner is under a third of the way in.
 expect {
@@ -290,12 +290,12 @@ expect {
 		[Panel(_, [Text(banner)]), _] => banner.color.a
 		_ => -1.0
 	}
-	end_texts(half) == ["WELL DONE", "Level 2500", "Score 4500"] and alpha > 0.29 and alpha < 0.3
+	end_texts(half) == ["WELL DONE", "Level score 2500", "Score 4500"] and alpha > 0.29 and alpha < 0.3
 }
 
 # Once the banner and the count finish, a prompt asks for the press. Cleared keeps the panel.
-expect end_texts(ended(2.0)) == ["WELL DONE", "Level 3000", "Score 5000", "Press Space"]
-expect end_texts({ ..ended(2.0), phase: Cleared({ ..Ending.start(3000), seconds: 2.0 }) }) == ["WELL DONE", "Level 3000", "Score 5000", "Press Space"]
+expect end_texts(ended(2.0)) == ["WELL DONE", "Level score 3000", "Score 5000", "Press Space"]
+expect end_texts({ ..ended(2.0), phase: Cleared({ ..Ending.start(3000), seconds: 2.0 }) }) == ["WELL DONE", "Level score 3000", "Score 5000", "Press Space"]
 
 # Won keeps the HUD and adds the play again prompt above the middle of the screen.
 expect {
